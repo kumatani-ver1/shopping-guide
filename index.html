@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ワイヤレスイヤホンの選び方ガイド（サンプル）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ===== カラー・書体のトークン ===== */
+  :root {
+    --bg: #eef2f4;
+    --panel: #ffffff;
+    --ink: #1d2b33;
+    --sub: #5b6b74;
+    --line: #c9d3d8;
+    --accent: #0f6e7a;
+    --accent-ink: #ffffff;
+    --mark: #f1c04a;
+    --font: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12191d; --panel: #1b252b; --ink: #e6eef1; --sub: #93a4ad;
+      --line: #33434b; --accent: #4fc0cf; --accent-ink: #08272c; --mark: #d9ac3a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12191d; --panel: #1b252b; --ink: #e6eef1; --sub: #93a4ad;
+    --line: #33434b; --accent: #4fc0cf; --accent-ink: #08272c; --mark: #d9ac3a;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: inherit; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--font); line-height: 1.8; font-size: 16px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 18px 64px; }
+
+  /* ===== 見出し部分 ===== */
+  h1 { font-size: clamp(28px, 7vw, 44px); line-height: 1.3; font-weight: 900; margin: 20px 0 12px; letter-spacing: .02em; }
+  .lead { color: var(--sub); margin: 0 0 8px; max-width: 34em; }
+  .note { font-size: 13px; color: var(--sub); }
+  h2 { font-size: 22px; font-weight: 700; margin: 52px 0 14px; padding-left: 12px; border-left: 6px solid var(--mark); line-height: 1.4; }
+
+  /* ===== 絞り込みパネル ===== */
+  .picker { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin-top: 28px; }
+  .picker fieldset { border: 0; padding: 0; margin: 0 0 14px; }
+  .picker legend { font-weight: 700; margin-bottom: 8px; padding: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips label { cursor: pointer; }
+  .chips input { position: absolute; opacity: 0; pointer-events: none; }
+  .chips span {
+    display: inline-block; padding: 6px 14px; border: 1px solid var(--line);
+    border-radius: 999px; font-size: 15px; background: var(--bg);
+  }
+  .chips input:checked + span { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+  .chips input:focus-visible + span { outline: 3px solid var(--mark); outline-offset: 2px; }
+  .count { font-weight: 700; margin: 0; }
+
+  /* ===== 商品リスト ===== */
+  .items { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 12px; }
+  .item { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; }
+  .item h3 { margin: 0; font-size: 18px; }
+  .item .price { font-size: 20px; font-weight: 900; text-align: right; }
+  .item p { grid-column: 1 / -1; margin: 4px 0 0; color: var(--sub); font-size: 15px; }
+  .tags { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .tags b { font-weight: 500; font-size: 12px; border: 1px solid var(--line); border-radius: 4px; padding: 0 8px; }
+  .item[hidden] { display: none; }
+  .empty { padding: 18px; border: 1px dashed var(--line); border-radius: 10px; color: var(--sub); }
+
+  /* ===== チェックリスト ===== */
+  .checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .checks label { display: flex; gap: 12px; align-items: flex-start; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; cursor: pointer; }
+  .checks input { margin-top: 7px; width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+  .checks strong { display: block; }
+  .checks small { color: var(--sub); font-size: 14px; }
+  .checks input:checked + div strong { text-decoration: line-through; color: var(--sub); }
+  .progress { margin: 0 0 10px; font-size: 14px; color: var(--sub); }
+
+  /* ===== 比較表 ===== */
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--accent); color: var(--accent-ink); }
+  tbody th { white-space: nowrap; font-weight: 700; }
+  tbody tr:last-child > * { border-bottom: 0; }
+
+  footer { margin-top: 56px; font-size: 13px; color: var(--sub); }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="note">お買い物ガイド（サンプル）</p>
+  <h1>ワイヤレスイヤホン、<br>失敗しない選び方</h1>
+  <p class="lead">使うシーンと予算を選ぶだけ。条件に合う商品だけが下に表示されます。</p>
+
+  <!-- 絞り込み -->
+  <section class="picker" aria-label="条件で絞り込む">
+    <fieldset>
+      <legend>どんな場面で使いますか？</legend>
+      <div class="chips" id="useChips">
+        <label><input type="radio" name="use" value="all" checked><span>すべて</span></label>
+        <label><input type="radio" name="use" value="commute"><span>通勤・通学</span></label>
+        <label><input type="radio" name="use" value="sport"><span>運動</span></label>
+        <label><input type="radio" name="use" value="call"><span>通話・会議</span></label>
+        <label><input type="radio" name="use" value="music"><span>音質重視</span></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>予算はどのくらい？</legend>
+      <div class="chips" id="budgetChips">
+        <label><input type="radio" name="budget" value="all" checked><span>指定なし</span></label>
+        <label><input type="radio" name="budget" value="10000"><span>1万円まで</span></label>
+        <label><input type="radio" name="budget" value="20000"><span>2万円まで</span></label>
+        <label><input type="radio" name="budget" value="over"><span>2万円以上</span></label>
+      </div>
+    </fieldset>
+    <p class="count" id="count" aria-live="polite"></p>
+  </section>
+
+  <ul class="items" id="items">
+    <li class="item" data-use="commute,call" data-price="19800">
+      <h3>ソノーラ A1</h3><span class="price">¥19,800</span>
+      <p>電車内でも声や音楽が聞き取りやすい、強力なノイズ低減モデル。</p>
+      <div class="tags"><b>ノイズ低減</b><b>連続8時間</b><b>マルチポイント</b></div>
+    </li>
+    <li class="item" data-use="commute" data-price="5980">
+      <h3>ハコ イヤー mini</h3><span class="price">¥5,980</span>
+      <p>小さく軽いので毎日のカバンに入れっぱなしでも苦になりません。</p>
+      <div class="tags"><b>軽量 4g</b><b>連続6時間</b><b>コスパ重視</b></div>
+    </li>
+    <li class="item" data-use="sport" data-price="8800">
+      <h3>ランウィング S</h3><span class="price">¥8,800</span>
+      <p>耳掛け式で激しく動いても外れにくく、汗や雨にも強い設計。</p>
+      <div class="tags"><b>防水 IPX5</b><b>耳掛け式</b><b>連続9時間</b></div>
+    </li>
+    <li class="item" data-use="call,commute" data-price="12800">
+      <h3>ミドル ポッズ 2</h3><span class="price">¥12,800</span>
+      <p>通話用マイクが4基。在宅ワークやオンライン会議でも声がクリア。</p>
+      <div class="tags"><b>通話特化</b><b>マイク4基</b><b>連続7時間</b></div>
+    </li>
+    <li class="item" data-use="music" data-price="24800">
+      <h3>スタジオ T3</h3><span class="price">¥24,800</span>
+      <p>高音質コーデックに対応。細かな音の違いまでじっくり楽しめます。</p>
+      <div class="tags"><b>高音質コーデック</b><b>連続10時間</b><b>専用アプリ</b></div>
+    </li>
+  </ul>
+  <div class="empty" id="empty" hidden>条件に合う商品がありません。予算か用途を変えてみてください。</div>
+
+  <!-- チェックリスト -->
+  <h2>買う前の5つのチェック</h2>
+  <p class="progress" id="progress"></p>
+  <ul class="checks" id="checks">
+    <li><label><input type="checkbox"><div><strong>使っているスマホとの相性</strong><small>対応する接続方式・コーデックを確認します。</small></div></label></li>
+    <li><label><input type="checkbox"><div><strong>連続再生時間</strong><small>1日の使用時間より長いものを選ぶと安心です。</small></div></label></li>
+    <li><label><input type="checkbox"><div><strong>装着感</strong><small>可能なら店頭で試すか、返品条件を確認します。</small></div></label></li>
+    <li><label><input type="checkbox"><div><strong>防水性能</strong><small>運動や雨の日に使うなら、IPX4以上が目安です。</small></div></label></li>
+    <li><label><input type="checkbox"><div><strong>保証・サポート</strong><small>保証期間と、片耳だけ故障した場合の対応を見ます。</small></div></label></li>
+  </ul>
+
+  <!-- 比較表 -->
+  <h2>ノイズ低減の違い</h2>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>方式</th><th>特長</th><th>向いている人</th></tr></thead>
+      <tbody>
+        <tr><th>アクティブ</th><td>マイクで周囲の音を拾い、逆位相の音で打ち消す</td><td>電車・飛行機の騒音が気になる人</td></tr>
+        <tr><th>パッシブ</th><td>耳栓のように物理的に音を遮る</td><td>電池を節約したい人、価格を抑えたい人</td></tr>
+        <tr><th>外音取り込み</th><td>外の音をあえて聞こえるようにする</td><td>歩きながら周囲の安全を確保したい人</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>※ 掲載の商品名・価格・仕様はすべてサンプルです。実在の商品とは関係ありません。</footer>
+</main>
+
+<script>
+  // ===== 商品の絞り込み処理 =====
+  const items = Array.from(document.querySelectorAll('#items .item'));
+  const countEl = document.getElementById('count');
+  const emptyEl = document.getElementById('empty');
+
+  // 選択中のラジオボタンの値を取得
+  const val = (name) => document.querySelector('input[name="' + name + '"]:checked').value;
+
+  // 予算の条件に合うか判定
+  const matchBudget = (price, budget) => {
+    if (budget === 'all') return true;
+    if (budget === 'over') return price >= 20000;
+    return price <= Number(budget);
+  };
+
+  function applyFilter() {
+    const use = val('use');
+    const budget = val('budget');
+    let shown = 0;
+    items.forEach((el) => {
+      const okUse = use === 'all' || el.dataset.use.split(',').includes(use);
+      const okBudget = matchBudget(Number(el.dataset.price), budget);
+      el.hidden = !(okUse && okBudget);
+      if (!el.hidden) shown++;
+    });
+    countEl.textContent = shown + '件が見つかりました';
+    emptyEl.hidden = shown !== 0;
+  }
+  document.querySelectorAll('.picker input').forEach((i) => i.addEventListener('change', applyFilter));
+  applyFilter();
+
+  // ===== チェックリストの進捗表示 =====
+  const boxes = Array.from(document.querySelectorAll('#checks input'));
+  const progressEl = document.getElementById('progress');
+  function updateProgress() {
+    const done = boxes.filter((b) => b.checked).length;
+    progressEl.textContent = done === boxes.length
+      ? 'すべて確認できました。安心して選べます。'
+      : boxes.length + '項目中 ' + done + '項目 確認済み';
+  }
+  boxes.forEach((b) => b.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>
